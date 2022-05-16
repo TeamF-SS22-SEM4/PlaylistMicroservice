@@ -4,6 +4,6 @@ services:
     container_name: playlist-microservice
     build:
       context: .
-      dockerfile: src/main/docker/Dockerfile.native
+      dockerfile: src/main/docker/Dockerfile.jvm
     ports:
       - "8081:8080"

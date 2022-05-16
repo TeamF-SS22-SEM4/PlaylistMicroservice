@@ -1,3 +1,3 @@
-./gradlew build -Dquarkus.package.type=native
+./gradlew build
 docker-compose build
 docker-compose up -d

@@ -1,0 +1,9 @@
+version: '3.9'
+services:
+  playlist-microservice:
+    container_name: playlist-microservice
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile.native
+    ports:
+      - "8081:8080"

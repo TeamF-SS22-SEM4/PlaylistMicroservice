@@ -1,4 +1,4 @@
-package at.fhv.ec.communication;
+package at.fhv.ec.communication.queue;
 
 import at.fhv.ec.application.PurchaseService;
 import at.fhv.ec.domain.model.playlist.Playlist;
@@ -54,7 +54,7 @@ public class EventListener {
                         DigitalProductPurchasedDTO event = GSON.fromJson(events.get(i), DigitalProductPurchasedDTO.class);
 
                         // Check if playlist for user exists
-                        Optional<Playlist> playlistOpt = hibernatePlaylistRepository.findByUserId(event.getUserId());
+                        Optional<Playlist> playlistOpt = hibernatePlaylistRepository.findByUsername(event.getUserId());
                         Playlist playlist;
 
                         if(playlistOpt.isPresent()) {

@@ -12,19 +12,19 @@ import java.util.List;
 public class Playlist {
     @EmbeddedId
     private PlaylistId playlistId;
-    private String userId;
+    private String username;
     @ElementCollection
     private List<SongId> songs;
 
-    public static Playlist create(PlaylistId playlistId, String userId) {
-        return new Playlist(playlistId, userId);
+    public static Playlist create(PlaylistId playlistId, String username) {
+        return new Playlist(playlistId, username);
     }
 
     protected Playlist() {}
 
-    private Playlist(PlaylistId playlistId, String userId) {
+    private Playlist(PlaylistId playlistId, String username) {
         this.playlistId = playlistId;
-        this.userId = userId;
+        this.username = username;
         this.songs = new ArrayList<>();
     }
 
@@ -40,8 +40,8 @@ public class Playlist {
         return playlistId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
     public List<SongId> getSongs() {

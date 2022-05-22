@@ -9,7 +9,7 @@ import java.util.Optional;
 @ApplicationScoped
 public class HibernatePlaylistRepository implements PanacheRepository<Playlist> {
 
-    public Optional<Playlist> findByUserId(String userId) {
-        return Optional.ofNullable(find("userId", userId).firstResult());
+    public Optional<Playlist> findByUsername(String username) {
+        return Optional.ofNullable(find("username", username).firstResult());
     }
 }

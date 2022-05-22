@@ -1,4 +1,4 @@
-package at.fhv.ec;
+package at.fhv.ec.communication.rest;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;

@@ -22,6 +22,7 @@ dependencies {
     implementation 'com.github.TeamF-SS22-SEM4:RMI-Shared-Lib:v50'
     implementation("io.quarkus:quarkus-hibernate-orm-panache")
     implementation("io.quarkus:quarkus-jdbc-postgresql")
+    implementation 'io.quarkus:quarkus-jdbc-h2:2.9.1.Final'
 }
 
 group 'at.fhv.ec'

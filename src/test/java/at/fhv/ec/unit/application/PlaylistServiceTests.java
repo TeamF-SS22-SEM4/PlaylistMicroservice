@@ -1,7 +1,7 @@
 package at.fhv.ec.unit.application;
 
 import at.fhv.ec.application.api.PlaylistService;
-import at.fhv.ec.application.dto.SongDTO;
+import at.fhv.ec.application.dto.PlayableSongDTO;
 import at.fhv.ec.domain.model.playlist.Playlist;
 import at.fhv.ec.domain.model.playlist.PlaylistId;
 import at.fhv.ec.domain.model.song.Song;
@@ -54,7 +54,7 @@ class PlaylistServiceTests {
         Mockito.when(songRepository.findBySongId(songIdExpected)).thenReturn(Optional.of(songsExpected.get(0)));
 
         // when
-        List<SongDTO> songsActual = playlistService.playlistByUsername(usernameExpected);
+        List<PlayableSongDTO> songsActual = playlistService.playlistByUsername(usernameExpected);
 
         // then
         assertEquals(songsExpected.size(), songsActual.size());

@@ -1,7 +1,7 @@
 package at.fhv.ec.application.impl;
 
 import at.fhv.ec.application.api.PlaylistService;
-import at.fhv.ec.application.dto.SongDTO;
+import at.fhv.ec.application.dto.PlayableSongDTO;
 import at.fhv.ec.domain.model.playlist.Playlist;
 import at.fhv.ec.domain.model.song.Song;
 import at.fhv.ec.infrastructure.HibernatePlaylistRepository;
@@ -25,10 +25,10 @@ public class PlaylistServiceImpl implements PlaylistService {
     HibernateSongRepository songRepository;
 
     @Override
-    public List<SongDTO> playlistByUsername(String username) throws NoSuchElementException {
+    public List<PlayableSongDTO> playlistByUsername(String username) throws NoSuchElementException {
         Playlist playlist = playlistRepository.findByUsername(username).orElseThrow(NoSuchElementException::new);
 
-        List<SongDTO> songs = new ArrayList<>();
+        List<PlayableSongDTO> songs = new ArrayList<>();
 
         playlist.getSongs().forEach(songId -> {
             Song song = songRepository.findBySongId(songId).orElseThrow(NoSuchElementException::new);
@@ -39,8 +39,8 @@ public class PlaylistServiceImpl implements PlaylistService {
         return songs;
     }
 
-    private SongDTO dtoFromSong(Song song) {
-        return SongDTO.builder()
+    private PlayableSongDTO dtoFromSong(Song song) {
+        return PlayableSongDTO.builder()
                 .withSongId(song.getSongId().getUUID())
                 .withAlbumName(song.getAlbumName())
                 .withTitle(song.getTitle())

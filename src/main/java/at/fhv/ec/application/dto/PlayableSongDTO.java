@@ -2,23 +2,23 @@ package at.fhv.ec.application.dto;
 
 import java.util.UUID;
 
-public class SongDTO {
+public class PlayableSongDTO {
     private UUID songId;
     private String albumName;
     private String title;
     private String duration;
 
-    private SongDTO(){}
+    private PlayableSongDTO(){}
 
     public static Builder builder() {
         return new Builder();
     }
 
     public static class Builder {
-        private final SongDTO instance;
+        private final PlayableSongDTO instance;
 
         public Builder() {
-            this.instance = new SongDTO();
+            this.instance = new PlayableSongDTO();
         }
 
         public Builder withSongId(UUID songId) {
@@ -41,7 +41,7 @@ public class SongDTO {
             return this;
         }
 
-        public SongDTO build() {
+        public PlayableSongDTO build() {
             return this.instance;
         }
     }

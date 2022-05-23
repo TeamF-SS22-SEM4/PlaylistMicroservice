@@ -14,17 +14,6 @@ services:
       - playlist-microservice_network
     env_file:
       - .env
-  redis_queue:
-      container_name: redis-queue
-      image: redis:latest
-      restart: always
-      ports:
-        - ${REDIS_PORT}:${REDIS_PORT}
-      networks:
-        - playlist-microservice_network
-        - musicshop_backend_network
-      env_file:
-        - .env
   playlist-microservice:
     container_name: playlist-microservice
     build:
@@ -44,7 +33,6 @@ services:
 
 networks:
   playlist-microservice_network:
-    name: playlist-microservice_network
-    driver: bridge
+    external: true
   musicshop_backend_network:
     external: true

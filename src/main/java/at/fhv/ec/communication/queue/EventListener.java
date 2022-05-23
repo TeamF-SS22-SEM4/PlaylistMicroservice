@@ -10,9 +10,11 @@ import at.fhv.ec.infrastructure.HibernateSongRepository;
 import at.fhv.ss22.ea.f.communication.dto.DigitalProductPurchasedDTO;
 import com.google.gson.Gson;
 import io.quarkus.runtime.StartupEvent;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPubSub;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -22,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Transactional
 @ApplicationScoped
 public class EventListener {
     @Inject
@@ -35,12 +36,38 @@ public class EventListener {
 
     private static final Gson GSON = new Gson();
 
-    void onStart(/*@Observes TODO uncomment */ StartupEvent startupEvent) {
-        //TODO get from env, also currently requires the redis instance to be running
-        JedisPool jedisPool = new JedisPool("redis-queue", 6379);
+    @ConfigProperty(name = "redis.host")
+    String redisHost;
+
+    @ConfigProperty(name = "redis.port")
+    int redisPort;
+
+    @Transactional
+    void onStart(@Observes StartupEvent startupEvent) {
+
+        JedisPool jedisPool = new JedisPool(redisHost, redisPort);
 
         try (Jedis jedis = jedisPool.getResource()) {
+            List<String> events = jedis.brpop(0, PURCHASE_EVENT_QUEUE_NAME);
+            for (String s : events) {
+                if(!s.equalsIgnoreCase(PURCHASE_EVENT_QUEUE_NAME)) {
+                    logger.debug("received new event " + s);
+                    System.out.println(s);
+
+                    DigitalProductPurchasedDTO event = GSON.fromJson(s, DigitalProductPurchasedDTO.class);
+
+                    purchaseService.receivePurchase(event);
+                }
+            }
+
+            /*
             Thread blockingReceiver = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
                 logger.debug("Started queue listener");
                 while (true) {
                     List<String> events = jedis.brpop(0, PURCHASE_EVENT_QUEUE_NAME);
@@ -54,8 +81,9 @@ public class EventListener {
                     }
                 }
             });
+             */
 
-            blockingReceiver.start();
+            // blockingReceiver.start();
         }
     }
 }

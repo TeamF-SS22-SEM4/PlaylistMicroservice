@@ -11,10 +11,12 @@ import at.fhv.ss22.ea.f.communication.dto.DigitalProductPurchasedDTO;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
 @ApplicationScoped
+@Transactional
 public class PurchaseServiceImpl implements PurchaseService {
 
     @Inject
@@ -27,7 +29,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     public void receivePurchase(DigitalProductPurchasedDTO event) {
         // Check if playlist for user exists
-        Optional<Playlist> playlistOpt = hibernatePlaylistRepository.findByUsername(event.getUserId());
+        Optional<Playlist> playlistOpt = hibernatePlaylistRepository.findByUsername(event.getUsername());
         Playlist playlist;
 
         if(playlistOpt.isPresent()) {
@@ -36,7 +38,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             // Create playlist if not
             playlist = Playlist.create(
                     new PlaylistId(UUID.randomUUID()),
-                    event.getUserId()
+                    event.getUsername()
             );
 
             hibernatePlaylistRepository.persist(playlist);

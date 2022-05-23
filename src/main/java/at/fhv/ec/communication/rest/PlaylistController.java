@@ -2,6 +2,8 @@ package at.fhv.ec.communication.rest;
 
 import at.fhv.ec.application.api.PlaylistService;
 import at.fhv.ec.application.dto.PlayableSongDTO;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponseSchema;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -22,6 +24,9 @@ public class PlaylistController {
     @GET
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
+    @APIResponse(responseCode = "200",description = "")
+    @APIResponse(responseCode = "404", description = "User not found")
+    @APIResponseSchema(value = PlayableSongDTO[].class, responseCode = "200")
     public Response getPlaylist(@PathParam("username") String username) {
         try {
             List<PlayableSongDTO> songList = playlistService.playlistByUsername(username);

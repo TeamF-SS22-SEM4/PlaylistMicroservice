@@ -47,4 +47,31 @@ class HibernateSongRepositoryTests {
         assertEquals(titleExpected, songActual.getTitle());
         assertEquals(durationExpected, songActual.getDuration());
     }
+
+    @Test
+    void given_song_in_repository_when_findBySongId_then_return_equals_song() {
+        // given
+        UUID songIdUUDExpected = UUID.randomUUID();
+        SongId songIdExpected = new SongId(songIdUUDExpected);
+        String albumNameExpected = "SomeAlbum";
+        String titleExpected = "SomeTitle";
+        String durationExpected = "20:10";
+        Song songExpected = Song.create(songIdExpected, albumNameExpected, titleExpected, durationExpected);
+
+        hibernateSongRepository.persist(songExpected);
+
+        // when
+        Optional<Song> songActualOpt = hibernateSongRepository.findBySongId(songIdExpected);
+
+        // then
+        assertFalse(songActualOpt.isEmpty());
+
+        Song songActual = songActualOpt.get();
+        assertEquals(songExpected, songActual);
+        assertEquals(songIdUUDExpected, songActual.getSongId().getUUID());
+        assertEquals(songIdExpected, songActual.getSongId());
+        assertEquals(albumNameExpected, songActual.getAlbumName());
+        assertEquals(titleExpected, songActual.getTitle());
+        assertEquals(durationExpected, songActual.getDuration());
+    }
 }

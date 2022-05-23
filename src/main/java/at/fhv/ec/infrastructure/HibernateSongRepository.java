@@ -10,7 +10,7 @@ import java.util.Optional;
 @ApplicationScoped
 public class HibernateSongRepository implements PanacheRepository<Song> {
     public Optional<Song> findByTitleAndAlbum(String title, String album) {
-        return Optional.of(find("title and albumName", title, album).firstResult());
+        return Optional.of(find("title = ?1 and albumName = ?2", title, album).firstResult());
     }
 
     public Optional<Song> findBySongId(SongId songId) {

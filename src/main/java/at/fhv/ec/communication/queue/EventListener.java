@@ -1,6 +1,5 @@
 package at.fhv.ec.communication.queue;
 
-import at.fhv.ec.application.PurchaseService;
 import at.fhv.ec.domain.model.playlist.Playlist;
 import at.fhv.ec.domain.model.playlist.PlaylistId;
 import at.fhv.ec.domain.model.song.Song;
@@ -37,6 +36,7 @@ public class EventListener {
 
     private static final Gson GSON = new Gson();
 
+    /*
     void onStart(@Observes StartupEvent startupEvent) {
         //TODO get from env, also currently requires the redis instance to be running
         JedisPool jedisPool = new JedisPool("redis-queue", 6379);
@@ -97,4 +97,6 @@ public class EventListener {
             blockingReceiver.start();
         }
     }
+     */
+
 }

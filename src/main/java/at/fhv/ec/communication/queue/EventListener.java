@@ -1,5 +1,6 @@
 package at.fhv.ec.communication.queue;
 
+import at.fhv.ec.application.api.PurchaseService;
 import at.fhv.ec.domain.model.playlist.Playlist;
 import at.fhv.ec.domain.model.playlist.PlaylistId;
 import at.fhv.ec.domain.model.song.Song;
@@ -26,21 +27,17 @@ import java.util.UUID;
 public class EventListener {
     @Inject
     Logger logger;
-    @Inject
-    HibernatePlaylistRepository hibernatePlaylistRepository;
 
     @Inject
-    HibernateSongRepository hibernateSongRepository;
+    PurchaseService purchaseService;
 
     private static final String PURCHASE_EVENT_QUEUE_NAME = "purchasedQueue";
 
     private static final Gson GSON = new Gson();
 
-    /*
-    void onStart(@Observes StartupEvent startupEvent) {
+    void onStart(/*@Observes TODO uncomment */ StartupEvent startupEvent) {
         //TODO get from env, also currently requires the redis instance to be running
         JedisPool jedisPool = new JedisPool("redis-queue", 6379);
-
 
         try (Jedis jedis = jedisPool.getResource()) {
             Thread blockingReceiver = new Thread(() -> {
@@ -53,43 +50,7 @@ public class EventListener {
 
                         DigitalProductPurchasedDTO event = GSON.fromJson(events.get(i), DigitalProductPurchasedDTO.class);
 
-                        // Check if playlist for user exists
-                        Optional<Playlist> playlistOpt = hibernatePlaylistRepository.findByUsername(event.getUserId());
-                        Playlist playlist;
-
-                        if(playlistOpt.isPresent()) {
-                            playlist = playlistOpt.get();
-                        } else {
-                            // Create playlist if not
-                            playlist = Playlist.create(
-                                    new PlaylistId(UUID.randomUUID()),
-                                    event.getUserId()
-                            );
-
-                            hibernatePlaylistRepository.persist(playlist);
-                        }
-
-                        event.getPurchasedSongs().forEach(songDTO -> {
-                            Optional<Song> songOpt = hibernateSongRepository.findByTitleAndAlbum(songDTO.getTitle(), event.getAlbumName());
-                            Song song;
-                            // Check if song already exists
-                            if(songOpt.isEmpty()) {
-                                // If not create song
-                                song = Song.create(
-                                        new SongId(UUID.randomUUID()),
-                                        event.getAlbumName(),
-                                        songDTO.getTitle(),
-                                        songDTO.getDuration()
-                                );
-
-                                hibernateSongRepository.persist(song);
-                            } else {
-                                song = songOpt.get();
-                            }
-
-                            // Add song to playlist
-                            playlist.addSongToPlaylist(song.getSongId());
-                        });
+                        purchaseService.receivePurchase(event);
                     }
                 }
             });
@@ -97,6 +58,4 @@ public class EventListener {
             blockingReceiver.start();
         }
     }
-     */
-
 }

@@ -3,8 +3,8 @@ kubectl delete -f ./kubernetes/deploy/redis-queue.yml
 kubectl delete service queue-service
 
 kubectl delete deployment,svc postgresql
-# kubectl delete pvc postgresql-pv-claim
-# kubectl delete pv postgresql-pv-volume
+kubectl delete pvc postgresql-pv-claim
+kubectl delete pv postgresql-pv-volume
 
 kubectl delete deployments playlist-app
 kubectl delete service playlist-service
@@ -20,7 +20,7 @@ kubectl apply -f ./kubernetes/deploy/redis-queue.yml
 kubectl expose pod redis-queue --type=LoadBalancer --name=queue-service
 
 # postgres
-# kubectl apply -f ./kubernetes/deploy/postgres-persistent-volume.yml
+kubectl apply -f ./kubernetes/deploy/postgres-persistent-volume.yml
 kubectl apply -f ./kubernetes/deploy/postgres-deployment.yml
 
 ./gradlew build

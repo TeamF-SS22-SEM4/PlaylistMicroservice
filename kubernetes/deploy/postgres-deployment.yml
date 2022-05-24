@@ -37,11 +37,11 @@ spec:
           ports:
             - containerPort: 5432
               name: postgresql
-#              TODO make this work, currently password from-env doesn't work when volume is mounted
-#          volumeMounts:
-#            - name: postgresql-persistent-storage
-#              mountPath: /var/lib/postgresql/data
-#      volumes:
-#        - name: postgresql-persistent-storage
-#          persistentVolumeClaim:
-#            claimName: postgresql-pv-claim
+#              If authentication from microservice to postgre doesnt work -> docker volume prune
+          volumeMounts:
+            - name: postgresql-persistent-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgresql-persistent-storage
+          persistentVolumeClaim:
+            claimName: postgresql-pv-claim

@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: postgresql
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql
+spec:
+  selector:
+    matchLabels:
+      app: postgresql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:14.3
+          env:
+            - name: POSTGRES_USER
+              value: username
+            - name: POSTGRES_PASSWORD
+              value: password
+            - name: POSTGRES_DB
+              value: playlistdb
+          ports:
+            - containerPort: 5432
+              name: postgresql
+#              TODO make this work, currently password from-env doesn't work when volume is mounted
+#          volumeMounts:
+#            - name: postgresql-persistent-storage
+#              mountPath: /var/lib/postgresql/data
+#      volumes:
+#        - name: postgresql-persistent-storage
+#          persistentVolumeClaim:
+#            claimName: postgresql-pv-claim

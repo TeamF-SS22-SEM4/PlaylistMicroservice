@@ -12,6 +12,8 @@ public class Song {
     private String title;
     private String duration;
 
+    private String mp3Path = "example.mp3"; //TODO change if more than one example.mp3 is needed;
+
     public static Song create(SongId songId, String albumName, String title, String duration) {
         return new Song(songId, albumName, title, duration);
     }
@@ -39,6 +41,10 @@ public class Song {
 
     public String getDuration() {
         return duration;
+    }
+
+    public String getMp3Path() {
+        return mp3Path;
     }
 
     @Override

@@ -8,6 +8,7 @@ import at.fhv.ec.domain.model.song.SongId;
 import at.fhv.ec.infrastructure.HibernatePlaylistRepository;
 import at.fhv.ec.infrastructure.HibernateSongRepository;
 import at.fhv.ss22.ea.f.communication.dto.DigitalProductPurchasedDTO;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -18,6 +19,8 @@ import java.util.UUID;
 @ApplicationScoped
 @Transactional
 public class PurchaseServiceImpl implements PurchaseService {
+    @Inject
+    Logger logger;
 
     @Inject
     HibernatePlaylistRepository hibernatePlaylistRepository;
@@ -28,24 +31,28 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public void receivePurchase(DigitalProductPurchasedDTO event) {
+        logger.info("Received new event " + event);
         // Check if playlist for user exists
         Optional<Playlist> playlistOpt = hibernatePlaylistRepository.findByUsername(event.getUsername());
         Playlist playlist;
 
-        if(playlistOpt.isPresent()) {
-            playlist = playlistOpt.get();
-        } else {
+        if(playlistOpt.isEmpty()) {
             // Create playlist if not
+            logger.info("Couldn't find playlist for " + event.getUsername() + ".\nCreating new playlist");
             playlist = Playlist.create(
                     new PlaylistId(UUID.randomUUID()),
                     event.getUsername()
             );
 
             hibernatePlaylistRepository.persist(playlist);
+        } else {
+            logger.info("Found playlist for " + event.getUsername());
+            playlist = playlistOpt.get();
         }
 
         event.getPurchasedSongs().forEach(songDTO -> {
             Optional<Song> songOpt = hibernateSongRepository.findByTitleAndAlbum(songDTO.getTitle(), event.getAlbumName());
+
             Song song;
             // Check if song already exists
             if(songOpt.isEmpty()) {
@@ -63,8 +70,11 @@ public class PurchaseServiceImpl implements PurchaseService {
             }
 
             // Add song to playlist
-            playlist.addSongToPlaylist(song.getSongId());
-        });
+            try {
+                playlist.addSongToPlaylist(song.getSongId());
+            } catch (UnsupportedOperationException e) {
 
+            }
+        });
     }
 }

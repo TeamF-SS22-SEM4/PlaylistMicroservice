@@ -10,6 +10,7 @@ import at.fhv.ec.infrastructure.HibernateSongRepository;
 import at.fhv.ss22.ea.f.communication.dto.DigitalProductPurchasedDTO;
 import com.google.gson.Gson;
 import io.quarkus.runtime.StartupEvent;
+import io.quarkus.scheduler.Scheduled;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 import redis.clients.jedis.Jedis;
@@ -42,48 +43,21 @@ public class EventListener {
     @ConfigProperty(name = "redis.port")
     int redisPort;
 
-    @Transactional
-    void onStart(@Observes StartupEvent startupEvent) {
-
+    @Scheduled(every="10s")
+    void receiveEvents() {
         JedisPool jedisPool = new JedisPool(redisHost, redisPort);
 
         try (Jedis jedis = jedisPool.getResource()) {
             List<String> events = jedis.brpop(0, PURCHASE_EVENT_QUEUE_NAME);
+            logger.info("Received " + events.size() + " events");
             for (String s : events) {
                 if(!s.equalsIgnoreCase(PURCHASE_EVENT_QUEUE_NAME)) {
-                    logger.debug("received new event " + s);
-                    System.out.println(s);
 
                     DigitalProductPurchasedDTO event = GSON.fromJson(s, DigitalProductPurchasedDTO.class);
 
                     purchaseService.receivePurchase(event);
                 }
             }
-
-            /*
-            Thread blockingReceiver = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                logger.debug("Started queue listener");
-                while (true) {
-                    List<String> events = jedis.brpop(0, PURCHASE_EVENT_QUEUE_NAME);
-                    //first result from brpop is the Key of the list -> discard that
-                    for (int i = 1; i < events.size(); i += 1) {
-                        logger.debug("received new event");
-
-                        DigitalProductPurchasedDTO event = GSON.fromJson(events.get(i), DigitalProductPurchasedDTO.class);
-
-                        purchaseService.receivePurchase(event);
-                    }
-                }
-            });
-             */
-
-            // blockingReceiver.start();
         }
     }
 }

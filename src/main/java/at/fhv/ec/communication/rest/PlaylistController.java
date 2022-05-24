@@ -2,6 +2,7 @@ package at.fhv.ec.communication.rest;
 
 import at.fhv.ec.application.api.PlaylistService;
 import at.fhv.ec.application.dto.PlayableSongDTO;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponseSchema;
 
@@ -26,7 +27,10 @@ public class PlaylistController {
     @Produces(MediaType.APPLICATION_JSON)
     @APIResponse(responseCode = "200",description = "")
     @APIResponse(responseCode = "404", description = "User not found")
+    @APIResponse(responseCode = "403", description = "Not Authenticated") //TODO authorization so these can actually be returned
+    @APIResponse(responseCode = "401", description = "Unauthorized")
     @APIResponseSchema(value = PlayableSongDTO[].class, responseCode = "200")
+    @Operation(operationId = "getPlaylist", summary = "Get the Playlist of user")
     public Response getPlaylist(@PathParam("username") String username) {
         try {
             List<PlayableSongDTO> songList = playlistService.playlistByUsername(username);

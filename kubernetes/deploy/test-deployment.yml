@@ -20,5 +20,5 @@ spec:
           image: team-f-playlist-microservice-jvm
           imagePullPolicy: Never #needed because we are using local docker-image not pulling from some registry
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
               name: playlist-rest

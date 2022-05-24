@@ -28,7 +28,7 @@ public class Playlist {
         this.songs = new ArrayList<>();
     }
 
-    public void addSongToPlaylist(SongId songId) {
+    public void addSongToPlaylist(SongId songId) throws UnsupportedOperationException{
         if(songs.contains(songId)) {
             throw new UnsupportedOperationException();
         }

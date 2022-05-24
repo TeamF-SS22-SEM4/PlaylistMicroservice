@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @QuarkusTest
 @Transactional
 class HibernateSongRepositoryTests {
-
     @Inject
     HibernateSongRepository hibernateSongRepository;
 

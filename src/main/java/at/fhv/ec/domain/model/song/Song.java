@@ -12,19 +12,22 @@ public class Song {
     private String title;
     private String duration;
 
+    private String artists;
+
     private String mp3Path = "playlist-api/v1/mp3/example.mp3"; //TODO change if more than one example.mp3 is needed;
 
-    public static Song create(SongId songId, String albumName, String title, String duration) {
-        return new Song(songId, albumName, title, duration);
+    public static Song create(SongId songId, String albumName, String title, String duration, String artists) {
+        return new Song(songId, albumName, title, duration, artists);
     }
 
     protected Song(){}
 
-    public Song(SongId songId, String albumName, String title, String duration) {
+    public Song(SongId songId, String albumName, String title, String duration, String artists) {
         this.songId = songId;
         this.albumName = albumName;
         this.title = title;
         this.duration = duration;
+        this.artists = artists;
     }
 
     public SongId getSongId() {
@@ -47,6 +50,10 @@ public class Song {
         return mp3Path;
     }
 
+    public String getArtists() {
+        return artists;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,4 +66,5 @@ public class Song {
     public int hashCode() {
         return Objects.hash(albumName, title);
     }
+
 }

@@ -47,7 +47,7 @@ class PlaylistServiceTests {
         String titleExpected = "SomeTitle";
         String durationExpected = "20:10";
 
-        List<Song> songsExpected = List.of(Song.create(songIdExpected, albumNameExpected, titleExpected, durationExpected));
+        List<Song> songsExpected = List.of(Song.create(songIdExpected, albumNameExpected, titleExpected, durationExpected, ""));
         playlistExpected.addSongToPlaylist(songIdExpected);
 
         Mockito.when(playlistRepository.findByUsername(usernameExpected)).thenReturn(Optional.of(playlistExpected));

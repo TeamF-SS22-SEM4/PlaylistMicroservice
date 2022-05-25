@@ -19,7 +19,7 @@ class SongTests {
         String durationExpected = "20:10";
 
         // when
-        Song song = Song.create(songIdExpected, albumNameExpected, titleExpected, durationExpected);
+        Song song = Song.create(songIdExpected, albumNameExpected, titleExpected, durationExpected, "");
 
         // then
         assertEquals(songIdUUDExpected, song.getSongId().getUUID());

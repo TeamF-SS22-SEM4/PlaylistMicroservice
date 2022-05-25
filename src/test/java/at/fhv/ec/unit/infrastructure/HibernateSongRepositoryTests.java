@@ -28,7 +28,7 @@ class HibernateSongRepositoryTests {
         String albumNameExpected = "SomeAlbum";
         String titleExpected = "SomeTitle";
         String durationExpected = "20:10";
-        Song songExpected = Song.create(songIdExpected, albumNameExpected, titleExpected, durationExpected);
+        Song songExpected = Song.create(songIdExpected, albumNameExpected, titleExpected, durationExpected, "");
 
         hibernateSongRepository.persist(songExpected);
 
@@ -55,7 +55,7 @@ class HibernateSongRepositoryTests {
         String albumNameExpected = "SomeAlbum";
         String titleExpected = "SomeTitle";
         String durationExpected = "20:10";
-        Song songExpected = Song.create(songIdExpected, albumNameExpected, titleExpected, durationExpected);
+        Song songExpected = Song.create(songIdExpected, albumNameExpected, titleExpected, durationExpected, "");
 
         hibernateSongRepository.persist(songExpected);
 

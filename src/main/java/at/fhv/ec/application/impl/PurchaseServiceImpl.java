@@ -61,7 +61,8 @@ public class PurchaseServiceImpl implements PurchaseService {
                         new SongId(UUID.randomUUID()),
                         event.getAlbumName(),
                         songDTO.getTitle(),
-                        songDTO.getDuration()
+                        songDTO.getDuration(),
+                        event.getArtists()
                 );
 
                 hibernateSongRepository.persist(song);

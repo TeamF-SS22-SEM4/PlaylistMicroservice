@@ -7,15 +7,11 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponseSchema;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 @Path("/playlists")
 public class PlaylistController {
@@ -32,7 +28,8 @@ public class PlaylistController {
     @APIResponse(responseCode = "401", description = "Unauthorized")
     @APIResponseSchema(value = PlayableSongDTO[].class, responseCode = "200")
     @Operation(operationId = "getPlaylist", summary = "Get the Playlist of user")
-    public Response getPlaylist(@PathParam("username") String username) {
+    public Response getPlaylist(@PathParam("username") String username, @HeaderParam("session-id") String sessionId) {
+        System.out.println("DEBUG got session-id " + sessionId);
         try {
             List<PlayableSongDTO> songList = playlistService.playlistByUsername(username);
             return Response.ok().entity(songList).build();

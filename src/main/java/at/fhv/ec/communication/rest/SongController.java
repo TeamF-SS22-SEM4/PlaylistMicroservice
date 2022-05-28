@@ -28,18 +28,6 @@ public class SongController {
     @APIResponse(responseCode = "500", description = "if the method is not yet implemented")
     @Operation(operationId = "getSong", description = "Responds with the MP3 of the song")
     public Response getSong(@PathParam("songId") UUID songId) {
-        // TODO: Implement --> Return MP3 file for streaming
-        return Response.serverError().build();
-    }
-
-    @GET
-    @Path("/download/{songId}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @APIResponse(responseCode = "200", description = "OK")
-    @APIResponse(responseCode = "404", description = "When the song cannot be found.")
-    @APIResponse(responseCode = "500", description = "if the method is not yet implemented")
-    @Operation(operationId = "downloadSong", description = "Responds with the MP3 of the song")
-    public Response downloadSong(@PathParam("songId") UUID songId) {
         try {
             File songFile = downloadSongService.downloadSong(songId);
             return Response.ok(songFile)

@@ -1,8 +1,10 @@
 package at.fhv.ec.communication.rest;
 
 import at.fhv.ec.application.api.DownloadSongService;
+import at.fhv.ec.application.dto.PlayableSongDTO;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponseSchema;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -12,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -26,14 +29,15 @@ public class SongController {
     @APIResponse(responseCode = "200", description = "OK")
     @APIResponse(responseCode = "404", description = "When the song cannot be found.")
     @APIResponse(responseCode = "500", description = "if the method is not yet implemented")
+    @APIResponseSchema(value = byte[].class, responseCode = "200")
     @Operation(operationId = "getSong", description = "Responds with the MP3 of the song")
     public Response getSong(@PathParam("songId") UUID songId) {
         try {
-            File songFile = downloadSongService.downloadSong(songId);
+            byte[] songFile = downloadSongService.downloadSong(songId);
             return Response.ok(songFile)
-                    .header("Content-Disposition", "attachment;filename=" + songFile)
+                    .header("Content-Disposition", "attachment;filename=example.mp3")
                     .build();
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | IOException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }

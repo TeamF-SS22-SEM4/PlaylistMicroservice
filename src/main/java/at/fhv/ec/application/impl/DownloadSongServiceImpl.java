@@ -7,6 +7,8 @@ import at.fhv.ec.infrastructure.HibernateSongRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -17,7 +19,7 @@ public class DownloadSongServiceImpl implements DownloadSongService {
     HibernateSongRepository hibernateSongRepository;
 
     @Override
-    public File downloadSong(UUID songId) throws NoSuchElementException {
+    public byte[] downloadSong(UUID songId) throws NoSuchElementException, IOException {
         // Ignore return value and check only if song exists
         hibernateSongRepository.findBySongId(new SongId(songId)).orElseThrow(NoSuchElementException::new);
 
@@ -27,6 +29,6 @@ public class DownloadSongServiceImpl implements DownloadSongService {
             throw new NoSuchElementException();
         }
 
-        return songFile;
+        return Files.readAllBytes(songFile.toPath());
     }
 }

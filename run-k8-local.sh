@@ -1,3 +1,5 @@
+eval $(minikube docker-env)
+
 kubectl delete -f ./kubernetes/deploy/redis-queue-config.yml
 kubectl delete -f ./kubernetes/deploy/redis-queue.yml
 kubectl delete service queue-service

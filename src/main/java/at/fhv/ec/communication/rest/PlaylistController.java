@@ -26,7 +26,7 @@ public class PlaylistController {
     @Produces(MediaType.APPLICATION_JSON)
     @APIResponse(responseCode = "200",description = "")
     @APIResponse(responseCode = "404", description = "User not found")
-    @APIResponse(responseCode = "403", description = "Not Authenticated") //TODO authorization so these can actually be returned
+    @APIResponse(responseCode = "403", description = "Not Authenticated")
     @APIResponse(responseCode = "401", description = "Unauthorized")
     @APIResponseSchema(value = PlayableSongDTO[].class, responseCode = "200")
     @Operation(operationId = "getPlaylist", summary = "Get the Playlist of user")

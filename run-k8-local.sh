@@ -11,10 +11,9 @@ kubectl delete deployment,svc postgresql
 kubectl delete deployments playlist-app
 kubectl delete service playlist-service
 
-kubectl delete -f .\kubernetes\deploy\secret.yml
+kubectl delete -f ./kubernetes/deploy/secret.yml
 
-
-kubectl apply -f .\kubernetes\deploy\secret.yml
+kubectl apply -f ./kubernetes/deploy/secret.yml
 
 # redis stuff
 kubectl apply -f ./kubernetes/deploy/redis-queue-config.yml

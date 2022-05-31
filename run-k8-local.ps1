@@ -9,10 +9,9 @@ kubectl delete pv postgresql-pv-volume
 kubectl delete deployments playlist-app
 kubectl delete service playlist-service
 
-# kubectl delete -f .\kubernetes\secret\postgresql.secret.yml
+kubectl delete -f .\kubernetes\deploy\secret.yml
 
-# postgre-credentials
-# kubectl apply -f .\kubernetes\secret\postgresql.secret.yml
+kubectl apply -f .\kubernetes\deploy\secret.yml
 
 # redis stuff
 kubectl apply -f ./kubernetes/deploy/redis-queue-config.yml
@@ -25,7 +24,7 @@ kubectl apply -f ./kubernetes/deploy/postgres-deployment.yml
 
 ./gradlew build
 docker build -f src/main/docker/Dockerfile.jvm -t team-f-playlist-microservice-jvm .
-kubectl apply -f ./kubernetes/deploy/test-deployment.yml
+kubectl apply -f ./kubernetes/deploy/playlist-deployment.yml
 # TODO figure out what types are available here and which is best
 kubectl expose deployment playlist-app --type=LoadBalancer --name=playlist-service
 

@@ -18,6 +18,19 @@ spec:
       containers:
         - name: hello-world
           image: team-f-playlist-microservice-jvm
+          env:
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: playlist-service-secret
+                  key: postgres_username
+                  optional: false
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: playlist-service-secret
+                  key: postgres_password
+                  optional: false
           imagePullPolicy: Never #needed because we are using local docker-image not pulling from some registry
           ports:
             - containerPort: 8081

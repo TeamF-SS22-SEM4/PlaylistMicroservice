@@ -29,15 +29,23 @@ spec:
           image: postgres:14.3
           env:
             - name: POSTGRES_USER
-              value: username
+              valueFrom:
+                secretKeyRef:
+                  name: playlist-service-secret
+                  key: postgres_username
+                  optional: false
             - name: POSTGRES_PASSWORD
-              value: password
+              valueFrom:
+                secretKeyRef:
+                  name: playlist-service-secret
+                  key: postgres_password
+                  optional: false
             - name: POSTGRES_DB
               value: playlistdb
           ports:
             - containerPort: 5432
               name: postgresql
-#              If authentication from microservice to postgre doesnt work -> docker volume prune
+#              TODO persistent volume
 #          volumeMounts:
 #            - name: postgresql-persistent-storage
 #              mountPath: /var/lib/postgresql/data

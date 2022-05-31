@@ -36,7 +36,7 @@ nb-configuration.xml
 .env
 
 # k8-secrets
-*.secret.yml
-*.secret.yaml
+*secret.yml
+*secret.yaml
 !*.secret.dist.yml
 !*.secret.dist.yaml

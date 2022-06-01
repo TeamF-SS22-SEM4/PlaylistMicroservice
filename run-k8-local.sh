@@ -28,7 +28,7 @@ kubectl apply -f ./kubernetes/deploy/postgres-deployment.yml
 docker build -f src/main/docker/Dockerfile.jvm -t team-f-playlist-microservice-jvm .
 kubectl apply -f ./kubernetes/deploy/playlist-deployment.yml
 # TODO figure out what types are available here and which is best
-kubectl expose deployment playlist-app --type=LoadBalancer --name=playlist-service
+kubectl expose deployment playlist-app --type=ClusterIP --name=playlist-service
 
 # optional, displays information after the cluster has been created
 # kubectl describe deployment playlist-app

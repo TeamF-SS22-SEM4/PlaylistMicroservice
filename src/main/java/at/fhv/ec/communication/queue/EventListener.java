@@ -3,13 +3,16 @@ package at.fhv.ec.communication.queue;
 import at.fhv.ec.application.api.PurchaseService;
 import at.fhv.ss22.ea.f.communication.dto.DigitalProductPurchasedDTO;
 import com.google.gson.Gson;
+import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPubSub;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -21,7 +24,8 @@ public class EventListener {
     @Inject
     PurchaseService purchaseService;
 
-    private static final String PURCHASE_EVENT_QUEUE_NAME = "purchasedQueue";
+    @ConfigProperty(name = "redis.queue.name")
+    String purchaseEventQueueName;
 
     private static final Gson GSON = new Gson();
 
@@ -31,21 +35,22 @@ public class EventListener {
     @ConfigProperty(name = "redis.port")
     int redisPort;
 
-    @Scheduled(every="5s")
-    void receiveEvents() {
-        JedisPool jedisPool = new JedisPool(redisHost, redisPort);
+    void receiveEvents(@Observes StartupEvent startupEvent) {
+        try(Jedis redisSubscriber = new Jedis(redisHost, redisPort)) {
+            JedisPubSub jedisPubSub = new JedisPubSub() {
+                @Override
+                public void onMessage(String channel, String message) {
+                    logger.info("Received event from channel: " + channel);
 
-        try (Jedis jedis = jedisPool.getResource()) {
-            List<String> events = jedis.brpop(0, PURCHASE_EVENT_QUEUE_NAME);
-            logger.info("Received " + events.size() + " events");
-            for (String s : events) {
-                if(!s.equalsIgnoreCase(PURCHASE_EVENT_QUEUE_NAME)) {
+                    if(channel.equalsIgnoreCase(purchaseEventQueueName)) {
+                        DigitalProductPurchasedDTO event = GSON.fromJson(message, DigitalProductPurchasedDTO.class);
 
-                    DigitalProductPurchasedDTO event = GSON.fromJson(s, DigitalProductPurchasedDTO.class);
-
-                    purchaseService.receivePurchase(event);
+                        purchaseService.receivePurchase(event);
+                    }
                 }
-            }
+            };
+
+            redisSubscriber.subscribe(jedisPubSub, purchaseEventQueueName);
         }
     }
 }

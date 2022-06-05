@@ -74,7 +74,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             try {
                 playlist.addSongToPlaylist(song.getSongId());
             } catch (UnsupportedOperationException e) {
-
+                logger.info("Error at adding song to playlist\n" + e.getMessage());
             }
         });
     }

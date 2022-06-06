@@ -1,7 +1,6 @@
 package at.fhv.ec.communication.rest;
 
 import at.fhv.ec.application.api.DownloadSongService;
-import at.fhv.ec.application.dto.PlayableSongDTO;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponseSchema;
@@ -13,7 +12,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.UUID;

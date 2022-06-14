@@ -43,7 +43,6 @@ public class PlaylistServiceImpl implements PlaylistService {
                 .withAlbumName(song.getAlbumName())
                 .withTitle(song.getTitle())
                 .withDuration(song.getDuration())
-                .withFilePath(song.getMp3Path())
                 .withArtists(song.getArtists())
                 .build();
     }

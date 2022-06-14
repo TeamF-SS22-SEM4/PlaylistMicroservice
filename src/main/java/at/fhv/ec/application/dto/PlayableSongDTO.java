@@ -10,8 +10,6 @@ public class PlayableSongDTO {
 
     private String artists;
 
-    private String filePath;
-
     private PlayableSongDTO(){}
 
     public static Builder builder() {
@@ -37,10 +35,6 @@ public class PlayableSongDTO {
 
         public Builder withTitle(String title) {
             this.instance.title = title;
-            return this;
-        }
-        public Builder withFilePath(String path) {
-            this.instance.filePath = path;
             return this;
         }
 
@@ -73,10 +67,6 @@ public class PlayableSongDTO {
 
     public String getDuration() {
         return duration;
-    }
-
-    public String getFilePath() {
-        return filePath;
     }
 
     public String getArtists() {

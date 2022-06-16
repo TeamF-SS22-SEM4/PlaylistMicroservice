@@ -1,12 +1,52 @@
 version: "3.9"
 services:
-  playlist-service:
-    networks:
-      - inter_server_connection
   queue-service:
+    container_name: queue-service
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
     networks:
+      - playlist_microservice_network
       - inter_server_connection
+    env_file:
+      - .env
+  postgresql:
+      container_name: postgresql
+      image: postgres:latest
+      restart: always
+      environment:
+        - POSTGRES_USER=${POSTGRES_USERNAME}
+        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        - POSTGRES_DB=playlistdb
+      ports:
+        - "5434:5432"
+      networks:
+        - playlist_microservice_network
+      env_file:
+        - .env
+  playlist-service:
+      container_name: playlist-service
+      build:
+        context: .
+        dockerfile: ./src/main/docker/Dockerfile.jvm
+      env_file:
+        - .env
+      ports:
+        - "8083:8080"
+      depends_on:
+        - queue-service
+        - postgresql
+      links:
+        - queue-service
+        - postgresql
+      networks:
+        - playlist_microservice_network
+        - inter_server_connection
 
 networks:
+  playlist_microservice_network:
+    name: playlist_microservice_network
+    driver: bridge
   inter_server_connection:
     external: true

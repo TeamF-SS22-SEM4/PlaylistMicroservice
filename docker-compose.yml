@@ -8,7 +8,7 @@ services:
       - "6379:6379"
     networks:
       - playlist_microservice_network
-      - inter_server_connection
+      - microservices
     env_file:
       - .env
   postgresql:
@@ -27,9 +27,7 @@ services:
       - .env
   playlist-service:
     container_name: playlist-service
-    build:
-      context: .
-      dockerfile: ./src/main/docker/Dockerfile.jvm
+    image: smighty/playlist-service:latest
     env_file:
       - .env
     ports:
@@ -42,8 +40,11 @@ services:
       - postgresql
     networks:
       - playlist_microservice_network
+      - microservices
 
 networks:
   playlist_microservice_network:
     name: playlist_microservice_network
     driver: bridge
+  microservices:
+    external: true

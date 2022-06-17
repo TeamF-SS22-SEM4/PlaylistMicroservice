@@ -31,6 +31,8 @@ public class PlaylistController {
     @APIResponseSchema(value = PlayableSongDTO[].class, responseCode = "200")
     @Operation(operationId = "getPlaylist", summary = "Get the Playlist of user")
     public Response getPlaylist(@PathParam("username") String username, @HeaderParam("session-id") String sessionId) {
+        /*
+        TODO: Remove or change it so it works deployed
         Client client = ClientBuilder.newClient();
         try {
             client.target("http://musicshop-backend:8080/api/v1/validateSession?sessionId=" + sessionId)
@@ -41,6 +43,7 @@ public class PlaylistController {
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
         }
+         */
 
 
         try {

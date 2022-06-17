@@ -25,10 +25,8 @@ public class PlaylistController {
     @GET
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    @APIResponse(responseCode = "200",description = "")
+    @APIResponse(responseCode = "200", description = "Playlist found")
     @APIResponse(responseCode = "404", description = "User not found")
-    @APIResponse(responseCode = "403", description = "Not Authenticated")
-    @APIResponse(responseCode = "401", description = "Unauthorized")
     @APIResponseSchema(value = PlayableSongDTO[].class, responseCode = "200")
     @Operation(operationId = "getPlaylist", summary = "Get the Playlist of user")
     public Response getPlaylist(@PathParam("username") String username) {
